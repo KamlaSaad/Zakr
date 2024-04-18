@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.zakr">
+    package="com.kamla.awrady">
    <application
-        android:label="zakr"
+        android:label="Zakr"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
