@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:zakr/controllers/shared.dart';
-import 'package:zakr/widgets/text.dart';
+import 'package:muslim/controllers/shared.dart';
+import 'package:muslim/widgets/text.dart';
 
 class MainBox extends StatelessWidget {
   final String text;
@@ -23,8 +23,8 @@ class MainBox extends StatelessWidget {
       onTap: ()=>press!(),
       child: Container(
         width: width,
-        margin: EdgeInsets.symmetric(vertical: margin??0),
-        padding: EdgeInsets.all(5.w),
+        margin: EdgeInsets.symmetric(vertical: margin??6.h),
+        padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 6.h),
         decoration: BoxDecoration(
           color: boxColor,
           borderRadius: BorderRadius.circular(radius??0),
@@ -37,7 +37,13 @@ class MainBox extends StatelessWidget {
             )
           ]
         ),
-       child: Center(child: TextWidget(text: text,color: txtColor,weight: FontWeight.normal,noResize: noResize))
+       child: Center(child: TextWidget(
+           text: text,color: txtColor,
+           weight: FontWeight.normal,
+           noResize: noResize,
+           fontSize: 20.sp,
+        )
+       )
       )
     );
   }

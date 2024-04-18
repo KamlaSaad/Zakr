@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SettingController extends GetxController{
   var mainColor = const Color(0xff367c98).obs,
-      bodyColor = Colors.white.obs,
+      bodyColor = const Color(0xffededed).obs,
       boxColor = Colors.white.obs,
       txtColor = Colors.black.obs,
       fontVal = 0.obs,

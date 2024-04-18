@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class BearishController extends GetxController{
+class SebhaController extends GetxController{
   var zkrIndex=0.obs,
       counter = 0.obs,
       syghaNo=3.obs,

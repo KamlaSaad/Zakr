@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:zakr/widgets/text.dart';
+import 'package:muslim/widgets/text.dart';
 import '../controllers/shared.dart';
 
-AppBar appBar({required String name, bool? center, required double? shadow}) {
+AppBar appBar({required String name, bool? center, double? shadow}) {
   return AppBar(
     leading: IconButton(
       icon: Icon(

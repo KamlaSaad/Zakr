@@ -2,7 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:zakr/controllers/audio_controller.dart';
+import 'package:muslim/controllers/quran_controller.dart';
 import '../helpers/internet_conn.dart';
 
 class VideosController extends GetxController{
@@ -15,7 +15,7 @@ class VideosController extends GetxController{
       playedDur="".obs,
       lastUrl="".obs,
       totalVideoLength=0.obs;
-  AudioController audioController=AudioController();
+  QuranController audioController=QuranController();
 
   RxList<Video> videos = <Video>[].obs;
   RxList<Reference> dbItems=<Reference>[].obs;

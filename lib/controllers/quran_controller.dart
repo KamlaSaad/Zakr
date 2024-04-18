@@ -7,19 +7,24 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quran/quran.dart' as quran;
-import 'package:zakr/data/qur3a.dart';
-import 'package:zakr/helpers/internet_conn.dart';
-import 'package:zakr/widgets/pop_up.dart';
+import 'package:quran/surah_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:muslim/data/qur3a.dart';
+import 'package:muslim/helpers/internet_conn.dart';
+import 'package:muslim/widgets/pop_up.dart';
 import '../helpers/notification.dart';
 
-class AudioController extends GetxController{
+class QuranController extends GetxController{
 
   AudioPlayer audioPlayer=AudioPlayer();
 
   var loading=false.obs,
       playing=false.obs,
-      surahName="".obs,
-      surahNo="".obs,
+      openAudioBox=false.obs,
+      tapIndex=0.obs,
+      surahIndex=0.obs,
+      surahName="الفاتحة".obs,
+      surahNo="1".obs,
       audioLink="".obs,
       sheikhName="".obs,
       sheikhIndex=0.obs,
@@ -40,6 +45,21 @@ class AudioController extends GetxController{
   final quranUrl="https://download.quranicaudio.com/quran/";
 
 
+  saveIndex(int i)async{
+    surahIndex.value=i;
+    var prefs=await SharedPreferences.getInstance();
+    prefs.setInt("quranPageIndex", surahIndex.value);
+  }
+  getIndex()async{
+    var prefs=await SharedPreferences.getInstance();
+    surahIndex.value=prefs.getInt("quranPageIndex")??0;
+  }
+
+  Map getSurahData(int surahIndex){
+    Map data=surah[surahIndex]??{};
+    data["type"]=surah[surahIndex]['place']=="Makkah"?"مكية":"مدنية";
+    return data;
+  }
 
   String getSurahNo(int id){
     String result="001";
@@ -64,7 +84,65 @@ class AudioController extends GetxController{
     }
   }
 
+  String getNames(bool firstPageInSurah){
+    List pageData=quran.getPageData(surahIndex.value+1);
+    if(pageData.length==1){
+      if(firstPageInSurah){
+        return "";
+      }else {
+        return quran.getSurahNameArabic(pageData[0]['surah']);
+      }
+    }else if(pageData.length==2){
+      String name1=quran.getSurahNameArabic(pageData[0]['surah']),
+          name2=quran.getSurahNameArabic(pageData[1]['surah']) ;
+      return "$name1 - $name2";
+    }else{
+      String name1=quran.getSurahNameArabic(pageData[0]['surah']),
+          name2=quran.getSurahNameArabic(pageData[2]['surah']) ;
+      return "$name1 : $name2";
+    }
+  }
+  String convertNum(int verseNumber) {
+    var arabicNumeric = '';
+    var digits = verseNumber.toString().split("").toList();
 
+    for (var e in digits) {
+      if (e == "0") {
+        arabicNumeric += "٠";
+      }
+      if (e == "1") {
+        arabicNumeric += "۱";
+      }
+      if (e == "2") {
+        arabicNumeric += "۲";
+      }
+      if (e == "3") {
+        arabicNumeric += "۳";
+      }
+      if (e == "4") {
+        arabicNumeric += "٤";
+      }
+      if (e == "5") {
+        arabicNumeric += "۵";
+      }
+      if (e == "6") {
+        arabicNumeric += "٦";
+      }
+      if (e == "7") {
+        arabicNumeric += "۷";
+      }
+      if (e == "8") {
+        arabicNumeric += "۸";
+      }
+      if (e == "9") {
+        arabicNumeric += "۹";
+      }
+    }
+
+    return arabicNumeric;
+  }
+
+  //*****************************Audio
   initLink()async {
     String link = "https://${qur3a[sheikhIndex.value]['url'] + '/' + surahNo.value}.mp3";
     if (audioLink.value != link) {
@@ -78,6 +156,7 @@ class AudioController extends GetxController{
       // await start();
     }
   }
+
   start()async{
     bool connected=await InternetConnection.connected();
     if(connected) {
@@ -126,6 +205,7 @@ class AudioController extends GetxController{
     start();
   }
   nextSurah(){
+    print(surahNo.value);
     int newId=int.parse(surahNo.value)+1;
     if(newId<115){
       changeSurah(newId);
